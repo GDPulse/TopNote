@@ -162,11 +162,15 @@ func _load_place():
 func _get_plugin_name():
 	return "Top Note"
 
+func _get_plugin_icon():
+	return load("res://addons/TopNote/icon.svg")
+
 func _handles(object: Object) -> bool:
 	return object is Resource
 
 func _edit(object: Object) -> void:
 	if not is_instance_valid(panel): return
+	if place in [PLACE_TOOLBAR, PLACE_CANVAS_EDITOR_MENU, PLACE_SPATIAL_EDITOR_MENU]: return
 	if object is Resource and not object is Script:
 		make_bottom_panel_item_visible(panel)
 		panel.open_linked_note(object)
