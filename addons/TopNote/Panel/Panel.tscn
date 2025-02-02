@@ -208,6 +208,7 @@ theme_override_constants/h_separation = 20
 visible = false
 layout_mode = 2
 theme_override_colors/current_line_color = Color(1, 1, 1, 0.0784314)
+wrap_mode = 1
 scroll_smooth = true
 scroll_past_end_of_file = true
 highlight_current_line = true
