@@ -45,6 +45,24 @@ func _enter_tree():
 	move_list = panel.get_child(1).get_child(0)
 	if not move_list.item_selected.is_connected(self._move_to):
 		move_list.item_selected.connect(self._move_to)
+	_add_panel()
+
+
+func _exit_tree():
+	_remove_panel()
+
+
+func _move_to(index):
+	if place in [PLACE_TOOLBAR, PLACE_SPATIAL_EDITOR_MENU]:
+		popup.hide()
+	var file = FileAccess.open(PLACE, FileAccess.WRITE)
+	file.store_string(str(index))
+	file.close()
+	_remove_panel()
+	_enter_tree()
+
+
+func _add_panel():
 	if place in [PLACE_TOOLBAR, PLACE_SPATIAL_EDITOR_MENU]:
 		popup.add_child(panel)
 	match place:
@@ -97,11 +115,11 @@ func _enter_tree():
 			add_control_to_dock(EditorPlugin.DOCK_SLOT_RIGHT_BR, panel)
 
 
-func _exit_tree():
+func _remove_panel():
 	move_list.item_selected.disconnect(self._move_to)
 	match place:
 		PLACE_BOTTOM:
-			remove_control_from_bottom_panel(panel)
+			remove_control_from_bottom_panel(panel) # <- WARNING
 		PLACE_TOOLBAR:
 			remove_control_from_container(EditorPlugin.CONTAINER_TOOLBAR, button)
 			EditorInterface.get_base_control().remove_child(popup)
@@ -130,15 +148,6 @@ func _exit_tree():
 			remove_control_from_container(EditorPlugin.CONTAINER_INSPECTOR_BOTTOM, panel)
 		_:
 			remove_control_from_docks(panel)
-
-func _move_to(index):
-	if place in [PLACE_TOOLBAR, PLACE_SPATIAL_EDITOR_MENU]:
-		popup.hide()
-	var file = FileAccess.open(PLACE, FileAccess.WRITE)
-	file.store_string(str(index))
-	file.close()
-	_exit_tree()
-	_enter_tree()
 
 
 func _show_popup():
