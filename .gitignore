@@ -16,3 +16,4 @@ mono_crash.*.json
 *.import
 *.tmp
 TopNote.zip
+/addons/TopNote/Files
