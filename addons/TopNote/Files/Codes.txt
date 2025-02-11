@@ -1,1 +1,0 @@
-[TN Code - Name]Test[TN Code - Text][TN Code - Name]Rendom[TN Code - Text]randi(4, 5)
