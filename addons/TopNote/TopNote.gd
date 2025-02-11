@@ -2,40 +2,40 @@
 extends EditorPlugin
 class_name TopNote
 
-const PLACE = "res://addons/TopNote/settings.txt"
+## TopNote plugin script & panel manager
+##
+## [b]Note:[/b] [color=yellow]experimental[/color] | You can use modify members for customize plugin with [code]@tool[/code] scripts. But just change propeties of members!
 
+const PLACE = "res://addons/TopNote/settings.txt" ## File path to save settings
+const DEFAULT = PanelPlace.BOTTOM ## Default place for panel
 
-const DEFAULT = PLACE_BOTTOM
-
-
-enum {
-	PLACE_BOTTOM,
-	PLACE_TOOLBAR,
-	PLACE_SPATIAL_EDITOR_MENU,
-	PLACE_SPATIAL_EDITOR_SIDE_LEFT,
-	PLACE_SPATIAL_EDITOR_SIDE_RIGHT,
-	PLACE_SPATIAL_EDITOR_BOTTOM,
-	PLACE_CANVAS_EDITOR_MENU,
-	PLACE_CANVAS_EDITOR_SIDE_LEFT,
-	PLACE_CANVAS_EDITOR_SIDE_RIGHT,
-	PLACE_CANVAS_EDITOR_BOTTOM,
-	PLACE_INSPECTOR,
-	PLACE_SLOT_LEFT_UL,
-	PLACE_SLOT_LEFT_BL,
-	PLACE_SLOT_LEFT_UR,
-	PLACE_SLOT_LEFT_BR,
-	PLACE_SLOT_RIGHT_UL,
-	PLACE_SLOT_RIGHT_BL,
-	PLACE_SLOT_RIGHT_UR,
-	PLACE_SLOT_RIGHT_BR,
+enum PanelPlace { ## Available places for panel
+	BOTTOM, ## [color=orange]Panel[/color] | Buttom panel (together with Output, Debug, Animation, etc) [i][color=green]Recommended & Default[/color][/i]
+	TOOLBAR, ## [color=orange]Popup[/color] | Main editor toolbar (next to play buttons)
+	SPATIAL_EDITOR_MENU, ## [color=orange]Popup[/color] | The toolbar that appears when 3D editor is active
+	SPATIAL_EDITOR_SIDE_LEFT, ## [color=yellow]experimental[/color] | [color=orange]Panel[/color] | Left sidebar of the 3D editor.
+	SPATIAL_EDITOR_SIDE_RIGHT, ## [color=yellow]experimental[/color] | [color=orange]Panel[/color] | Right sidebar of the 3D editor.
+	SPATIAL_EDITOR_BOTTOM, ## [color=yellow]experimental[/color] | [color=orange]Panel[/color] | Bottom panel of the 3D editor.
+	CANVAS_EDITOR_MENU, ## [color=orange]Popup[/color] | The toolbar that appears when 2D editor is active
+	CANVAS_EDITOR_SIDE_LEFT, ## [color=yellow]experimental[/color] | [color=orange]Panel[/color] | Left sidebar of the 2D editor.
+	CANVAS_EDITOR_SIDE_RIGHT, ## [color=yellow]experimental[/color] | [color=orange]Panel[/color] | Right sidebar of the 2D editor.
+	CANVAS_EDITOR_BOTTOM, ## [color=yellow]experimental[/color] | [color=orange]Panel[/color] | Bottom panel of the 2D editor.
+	INSPECTOR, ## [color=yellow]experimental[/color] | [color=orange]Panel[/color] | Bottom section of the inspector.
+	SLOT_LEFT_UL, ## [color=orange]Panel[/color] | Dock slot, left side, upper-left.
+	SLOT_LEFT_BL, ## [color=orange]Panel[/color] | Dock slot, left side, bottom-left.
+	SLOT_LEFT_UR, ## [color=orange]Panel[/color] | Dock slot, left side, upper-right.
+	SLOT_LEFT_BR, ## [color=orange]Panel[/color] | Dock slot, left side, bottom-right.
+	SLOT_RIGHT_UL, ## [color=orange]Panel[/color] | Dock slot, right side, upper-left.
+	SLOT_RIGHT_BL, ## [color=orange]Panel[/color] | Dock slot, right side, bottom-left.
+	SLOT_RIGHT_UR, ## [color=orange]Panel[/color] | Dock slot, right side, upper-right.
+	SLOT_RIGHT_BR, ## [color=orange]Panel[/color] | Dock slot, right side, bottom-right.
 }
 
-
-var place: int
-var panel: Control
-var button: Button
-var popup: Window
-var move_list: ItemList
+static var place: PanelPlace ## [color=lightblue]Static[/color] | Current place for panel, from [enum PanelPlaces]
+static var panel: Control ## [color=lightblue]Static[/color] | Instanced panel
+static var button: Button ## [color=lightblue]Static[/color] | Instanced button (for show popup)
+static var popup: Window ## [color=lightblue]Static[/color] | Popup window (parent of [member panel] in popup taged places)
+var move_list: ItemList ## [color=lightgreen]Dynamic[/color] | Item list for move to function (from [member panel])
 
 func _enter_tree():
 	_load_place()
@@ -43,8 +43,7 @@ func _enter_tree():
 	button = preload("res://addons/TopNote/Panel/Button.tscn").instantiate()
 	popup = preload("res://addons/TopNote/Panel/Popup.tscn").instantiate()
 	move_list = panel.get_child(1).get_child(0)
-	if not move_list.item_selected.is_connected(self._move_to):
-		move_list.item_selected.connect(self._move_to)
+	if not move_list.item_selected.is_connected(self._move_to): move_list.item_selected.connect(self._move_to)
 	_add_panel()
 
 
@@ -53,7 +52,7 @@ func _exit_tree():
 
 
 func _move_to(index):
-	if place in [PLACE_TOOLBAR, PLACE_SPATIAL_EDITOR_MENU]:
+	if place in [PanelPlace.TOOLBAR, PanelPlace.SPATIAL_EDITOR_MENU]:
 		popup.hide()
 	var file = FileAccess.open(PLACE, FileAccess.WRITE)
 	file.store_string(str(index))
@@ -63,88 +62,88 @@ func _move_to(index):
 
 
 func _add_panel():
-	if place in [PLACE_TOOLBAR, PLACE_SPATIAL_EDITOR_MENU]:
+	if place in [PanelPlace.TOOLBAR, PanelPlace.SPATIAL_EDITOR_MENU]:
 		popup.add_child(panel)
 	match place:
-		PLACE_BOTTOM:
-			add_control_to_bottom_panel(panel, "Top Note")
-			make_bottom_panel_item_visible(panel)
-		PLACE_TOOLBAR:
+		PanelPlace.BOTTOM:
+			var button = add_control_to_bottom_panel(panel, "Top Note")
+			button.tooltip_text = "TopNote"
+		PanelPlace.TOOLBAR:
 			EditorInterface.get_base_control().add_child(popup)
 			add_control_to_container(EditorPlugin.CONTAINER_TOOLBAR, button)
 			button.pressed.connect(self._show_popup)
-		PLACE_SPATIAL_EDITOR_MENU:
+		PanelPlace.SPATIAL_EDITOR_MENU:
 			EditorInterface.get_base_control().add_child(popup)
 			add_control_to_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, button)
 			button.flat = true
 			button.pressed.connect(self._show_popup)
-		PLACE_SPATIAL_EDITOR_SIDE_LEFT:
+		PanelPlace.SPATIAL_EDITOR_SIDE_LEFT:
 			add_control_to_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_SIDE_LEFT, panel)
-		PLACE_SPATIAL_EDITOR_SIDE_RIGHT:
+		PanelPlace.SPATIAL_EDITOR_SIDE_RIGHT:
 			add_control_to_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_SIDE_RIGHT, panel)
-		PLACE_SPATIAL_EDITOR_BOTTOM:
+		PanelPlace.SPATIAL_EDITOR_BOTTOM:
 			add_control_to_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_BOTTOM, panel)
-		PLACE_CANVAS_EDITOR_MENU:
+		PanelPlace.CANVAS_EDITOR_MENU:
 			EditorInterface.get_base_control().add_child(popup)
 			add_control_to_container(EditorPlugin.CONTAINER_CANVAS_EDITOR_MENU, button)
 			button.flat = true
 			button.pressed.connect(self._show_popup)
-		PLACE_CANVAS_EDITOR_SIDE_LEFT:
+		PanelPlace.CANVAS_EDITOR_SIDE_LEFT:
 			add_control_to_container(EditorPlugin.CONTAINER_CANVAS_EDITOR_SIDE_LEFT, panel)
-		PLACE_CANVAS_EDITOR_SIDE_RIGHT:
+		PanelPlace.CANVAS_EDITOR_SIDE_RIGHT:
 			add_control_to_container(EditorPlugin.CONTAINER_CANVAS_EDITOR_SIDE_RIGHT, panel)
-		PLACE_CANVAS_EDITOR_BOTTOM:
+		PanelPlace.CANVAS_EDITOR_BOTTOM:
 			add_control_to_container(EditorPlugin.CONTAINER_CANVAS_EDITOR_BOTTOM, panel)
-		PLACE_INSPECTOR:
+		PanelPlace.INSPECTOR:
 			add_control_to_container(EditorPlugin.CONTAINER_INSPECTOR_BOTTOM, panel)
-		PLACE_SLOT_LEFT_UL:
+		PanelPlace.SLOT_LEFT_UL:
 			add_control_to_dock(EditorPlugin.DOCK_SLOT_LEFT_UL, panel)
-		PLACE_SLOT_LEFT_BL:
+		PanelPlace.SLOT_LEFT_BL:
 			add_control_to_dock(EditorPlugin.DOCK_SLOT_LEFT_BL, panel)
-		PLACE_SLOT_LEFT_UR:
+		PanelPlace.SLOT_LEFT_UR:
 			add_control_to_dock(EditorPlugin.DOCK_SLOT_LEFT_UR, panel)
-		PLACE_SLOT_LEFT_BR:
+		PanelPlace.SLOT_LEFT_BR:
 			add_control_to_dock(EditorPlugin.DOCK_SLOT_LEFT_BR, panel)
-		PLACE_SLOT_RIGHT_UL:
+		PanelPlace.SLOT_RIGHT_UL:
 			add_control_to_dock(EditorPlugin.DOCK_SLOT_RIGHT_UL, panel)
-		PLACE_SLOT_RIGHT_BL:
+		PanelPlace.SLOT_RIGHT_BL:
 			add_control_to_dock(EditorPlugin.DOCK_SLOT_RIGHT_BL, panel)
-		PLACE_SLOT_RIGHT_UR:
+		PanelPlace.SLOT_RIGHT_UR:
 			add_control_to_dock(EditorPlugin.DOCK_SLOT_RIGHT_UR, panel)
-		PLACE_SLOT_RIGHT_BR:
+		PanelPlace.SLOT_RIGHT_BR:
 			add_control_to_dock(EditorPlugin.DOCK_SLOT_RIGHT_BR, panel)
 
 
 func _remove_panel():
 	move_list.item_selected.disconnect(self._move_to)
 	match place:
-		PLACE_BOTTOM:
+		PanelPlace.BOTTOM:
 			remove_control_from_bottom_panel(panel) # <- WARNING
-		PLACE_TOOLBAR:
+		PanelPlace.TOOLBAR:
 			remove_control_from_container(EditorPlugin.CONTAINER_TOOLBAR, button)
 			EditorInterface.get_base_control().remove_child(popup)
 			button.pressed.disconnect(self._show_popup)
-		PLACE_SPATIAL_EDITOR_MENU:
+		PanelPlace.SPATIAL_EDITOR_MENU:
 			remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_MENU, button)
 			EditorInterface.get_base_control().remove_child(popup)
 			button.pressed.disconnect(self._show_popup)
-		PLACE_SPATIAL_EDITOR_SIDE_LEFT:
+		PanelPlace.SPATIAL_EDITOR_SIDE_LEFT:
 			remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_SIDE_LEFT, panel)
-		PLACE_SPATIAL_EDITOR_SIDE_RIGHT:
+		PanelPlace.SPATIAL_EDITOR_SIDE_RIGHT:
 			remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_SIDE_RIGHT, panel)
-		PLACE_SPATIAL_EDITOR_BOTTOM:
+		PanelPlace.SPATIAL_EDITOR_BOTTOM:
 			remove_control_from_container(EditorPlugin.CONTAINER_SPATIAL_EDITOR_BOTTOM, panel)
-		PLACE_CANVAS_EDITOR_MENU:
+		PanelPlace.CANVAS_EDITOR_MENU:
 			EditorInterface.get_base_control().remove_child(popup)
 			remove_control_from_container(EditorPlugin.CONTAINER_CANVAS_EDITOR_MENU, button)
 			button.pressed.disconnect(self._show_popup)
-		PLACE_CANVAS_EDITOR_SIDE_LEFT:
+		PanelPlace.CANVAS_EDITOR_SIDE_LEFT:
 			remove_control_from_container(EditorPlugin.CONTAINER_CANVAS_EDITOR_SIDE_LEFT, panel)
-		PLACE_CANVAS_EDITOR_SIDE_RIGHT:
+		PanelPlace.CANVAS_EDITOR_SIDE_RIGHT:
 			remove_control_from_container(EditorPlugin.CONTAINER_CANVAS_EDITOR_SIDE_RIGHT, panel)
-		PLACE_CANVAS_EDITOR_BOTTOM:
+		PanelPlace.CANVAS_EDITOR_BOTTOM:
 			remove_control_from_container(EditorPlugin.CONTAINER_CANVAS_EDITOR_BOTTOM, panel)
-		PLACE_INSPECTOR:
+		PanelPlace.INSPECTOR:
 			remove_control_from_container(EditorPlugin.CONTAINER_INSPECTOR_BOTTOM, panel)
 		_:
 			remove_control_from_docks(panel)
@@ -179,7 +178,7 @@ func _handles(object: Object) -> bool:
 
 func _edit(object: Object) -> void:
 	if not is_instance_valid(panel): return
-	if place in [PLACE_TOOLBAR, PLACE_CANVAS_EDITOR_MENU, PLACE_SPATIAL_EDITOR_MENU]: return
+	if place in [PanelPlace.TOOLBAR, PanelPlace.CANVAS_EDITOR_MENU, PanelPlace.SPATIAL_EDITOR_MENU]: return
 	if object is Resource and not object is Script:
 		make_bottom_panel_item_visible(panel)
 		panel.open_linked_note(object)
