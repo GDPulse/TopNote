@@ -39,6 +39,7 @@ alignment = 2
 [node name="Tab" type="TabContainer" parent="VBox"]
 layout_mode = 2
 size_flags_vertical = 3
+current_tab = 0
 use_hidden_tabs_for_min_size = true
 
 [node name="Notes" type="TextEdit" parent="VBox/Tab"]
@@ -50,10 +51,12 @@ wrap_mode = 1
 scroll_smooth = true
 scroll_past_end_of_file = true
 highlight_current_line = true
+metadata/_tab_index = 0
 
 [node name="ToDo" type="VBoxContainer" parent="VBox/Tab"]
 visible = false
 layout_mode = 2
+metadata/_tab_index = 1
 
 [node name="Sample" type="CheckBox" parent="VBox/Tab/ToDo"]
 visible = false
@@ -78,11 +81,10 @@ clear_button_enabled = true
 
 [node name="Filter" type="OptionButton" parent="VBox/Tab/ToDo/Tools"]
 layout_mode = 2
-item_count = 5
 selected = 0
 allow_reselect = true
+item_count = 5
 popup/item_0/text = "All"
-popup/item_0/id = 0
 popup/item_1/text = "Add Feautre"
 popup/item_1/id = 1
 popup/item_2/text = "Fix Bug"
@@ -107,11 +109,10 @@ placeholder_text = "Add New"
 
 [node name="Type" type="OptionButton" parent="VBox/Tab/ToDo/Add"]
 layout_mode = 2
-item_count = 4
 selected = 3
 allow_reselect = true
+item_count = 4
 popup/item_0/text = "New Feature"
-popup/item_0/id = 0
 popup/item_1/text = "Fix Bug"
 popup/item_1/id = 1
 popup/item_2/text = "Task"
@@ -135,6 +136,7 @@ size_flags_vertical = 3
 [node name="Codes" type="VBoxContainer" parent="VBox/Tab"]
 visible = false
 layout_mode = 2
+metadata/_tab_index = 2
 
 [node name="Sample" type="VBoxContainer" parent="VBox/Tab/Codes"]
 visible = false
@@ -177,11 +179,10 @@ clear_button_enabled = true
 
 [node name="Filter" type="OptionButton" parent="VBox/Tab/Codes/Find"]
 layout_mode = 2
-item_count = 2
 selected = 0
 allow_reselect = true
+item_count = 2
 popup/item_0/text = "Names"
-popup/item_0/id = 0
 popup/item_1/text = "All"
 popup/item_1/id = 1
 
@@ -216,6 +217,7 @@ wrap_mode = 1
 scroll_smooth = true
 scroll_past_end_of_file = true
 highlight_current_line = true
+metadata/_tab_index = 3
 
 [node name="HBox" type="HBoxContainer" parent="VBox"]
 layout_mode = 2
@@ -227,7 +229,6 @@ text = "Menu"
 switch_on_hover = true
 item_count = 2
 popup/item_0/text = "Move To"
-popup/item_0/id = 0
 popup/item_1/text = "About"
 popup/item_1/id = 1
 
@@ -451,9 +452,9 @@ auto_brace_completion_highlight_matching = true
 [connection signal="pressed" from="VBox/Tab/Codes/Scroll/HFlow/Sample/HBox/Copy" to="VBox/Tab/Codes/Scroll/HFlow/Sample" method="_on_button_pressed"]
 [connection signal="pressed" from="VBox/Tab/Codes/Scroll/HFlow/Sample/HBox/Edit" to="VBox/Tab/Codes/Scroll/HFlow/Sample" method="_on_button_2_pressed"]
 [connection signal="pressed" from="VBox/Tab/Codes/Scroll/HFlow/Sample/HBox/Remove" to="VBox/Tab/Codes/Scroll/HFlow/Sample" method="_on_button_3_pressed"]
-[connection signal="pressed" from="VBox/Tab/Codes/Scroll/HFlow/@VBoxContainer@17582/HBox/Copy" to="VBox/Tab/Codes/Scroll/HFlow/@VBoxContainer@17582" method="_on_button_pressed"]
-[connection signal="pressed" from="VBox/Tab/Codes/Scroll/HFlow/@VBoxContainer@17582/HBox/Edit" to="VBox/Tab/Codes/Scroll/HFlow/@VBoxContainer@17582" method="_on_button_2_pressed"]
-[connection signal="pressed" from="VBox/Tab/Codes/Scroll/HFlow/@VBoxContainer@17582/HBox/Remove" to="VBox/Tab/Codes/Scroll/HFlow/@VBoxContainer@17582" method="_on_button_3_pressed"]
+[connection signal="pressed" from="VBox/Tab/Codes/Scroll/HFlow/@VBoxContainer@17353/HBox/Copy" to="VBox/Tab/Codes/Scroll/HFlow/@VBoxContainer@17353" method="_on_button_pressed"]
+[connection signal="pressed" from="VBox/Tab/Codes/Scroll/HFlow/@VBoxContainer@17353/HBox/Edit" to="VBox/Tab/Codes/Scroll/HFlow/@VBoxContainer@17353" method="_on_button_2_pressed"]
+[connection signal="pressed" from="VBox/Tab/Codes/Scroll/HFlow/@VBoxContainer@17353/HBox/Remove" to="VBox/Tab/Codes/Scroll/HFlow/@VBoxContainer@17353" method="_on_button_3_pressed"]
 [connection signal="text_changed" from="VBox/Tab/Linked Notes" to="." method="_on_linked_notes_text_changed"]
 [connection signal="close_requested" from="MoveTo" to="." method="_on_window_close_requested"]
 [connection signal="close_requested" from="About" to="." method="_on_window_2_close_requested"]
