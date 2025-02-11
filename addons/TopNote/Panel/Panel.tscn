@@ -78,7 +78,7 @@ clear_button_enabled = true
 
 [node name="Filter" type="OptionButton" parent="VBox/Tab/ToDo/Tools"]
 layout_mode = 2
-item_count = 4
+item_count = 5
 selected = 0
 allow_reselect = true
 popup/item_0/text = "All"
@@ -87,8 +87,10 @@ popup/item_1/text = "Add Feautre"
 popup/item_1/id = 1
 popup/item_2/text = "Fix Bug"
 popup/item_2/id = 2
-popup/item_3/text = "None"
+popup/item_3/text = "Task"
 popup/item_3/id = 3
+popup/item_4/text = "None"
+popup/item_4/id = 4
 
 [node name="RemoveMode" type="Button" parent="VBox/Tab/ToDo/Tools"]
 layout_mode = 2
@@ -105,15 +107,17 @@ placeholder_text = "Add New"
 
 [node name="Type" type="OptionButton" parent="VBox/Tab/ToDo/Add"]
 layout_mode = 2
-item_count = 3
-selected = 2
+item_count = 4
+selected = 3
 allow_reselect = true
 popup/item_0/text = "New Feature"
 popup/item_0/id = 0
 popup/item_1/text = "Fix Bug"
 popup/item_1/id = 1
-popup/item_2/text = "None"
+popup/item_2/text = "Task"
 popup/item_2/id = 2
+popup/item_3/text = "None"
+popup/item_3/id = 3
 
 [node name="Add" type="Button" parent="VBox/Tab/ToDo/Add"]
 layout_mode = 2
@@ -447,9 +451,9 @@ auto_brace_completion_highlight_matching = true
 [connection signal="pressed" from="VBox/Tab/Codes/Scroll/HFlow/Sample/HBox/Copy" to="VBox/Tab/Codes/Scroll/HFlow/Sample" method="_on_button_pressed"]
 [connection signal="pressed" from="VBox/Tab/Codes/Scroll/HFlow/Sample/HBox/Edit" to="VBox/Tab/Codes/Scroll/HFlow/Sample" method="_on_button_2_pressed"]
 [connection signal="pressed" from="VBox/Tab/Codes/Scroll/HFlow/Sample/HBox/Remove" to="VBox/Tab/Codes/Scroll/HFlow/Sample" method="_on_button_3_pressed"]
-[connection signal="pressed" from="VBox/Tab/Codes/Scroll/HFlow/@VBoxContainer@17581/HBox/Copy" to="VBox/Tab/Codes/Scroll/HFlow/@VBoxContainer@17581" method="_on_button_pressed"]
-[connection signal="pressed" from="VBox/Tab/Codes/Scroll/HFlow/@VBoxContainer@17581/HBox/Edit" to="VBox/Tab/Codes/Scroll/HFlow/@VBoxContainer@17581" method="_on_button_2_pressed"]
-[connection signal="pressed" from="VBox/Tab/Codes/Scroll/HFlow/@VBoxContainer@17581/HBox/Remove" to="VBox/Tab/Codes/Scroll/HFlow/@VBoxContainer@17581" method="_on_button_3_pressed"]
+[connection signal="pressed" from="VBox/Tab/Codes/Scroll/HFlow/@VBoxContainer@17582/HBox/Copy" to="VBox/Tab/Codes/Scroll/HFlow/@VBoxContainer@17582" method="_on_button_pressed"]
+[connection signal="pressed" from="VBox/Tab/Codes/Scroll/HFlow/@VBoxContainer@17582/HBox/Edit" to="VBox/Tab/Codes/Scroll/HFlow/@VBoxContainer@17582" method="_on_button_2_pressed"]
+[connection signal="pressed" from="VBox/Tab/Codes/Scroll/HFlow/@VBoxContainer@17582/HBox/Remove" to="VBox/Tab/Codes/Scroll/HFlow/@VBoxContainer@17582" method="_on_button_3_pressed"]
 [connection signal="text_changed" from="VBox/Tab/Linked Notes" to="." method="_on_linked_notes_text_changed"]
 [connection signal="close_requested" from="MoveTo" to="." method="_on_window_close_requested"]
 [connection signal="close_requested" from="About" to="." method="_on_window_2_close_requested"]

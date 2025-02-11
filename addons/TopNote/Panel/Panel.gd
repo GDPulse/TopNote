@@ -4,7 +4,13 @@ extends Control
 enum {
 	TODO_ADD_FEATURE,
 	TODO_FIX_BUG,
+	TODO_TASK,
 	TODO_NONE,
+}
+
+enum {
+	MENU_MOVE_TO,
+	MENU_ABOUT,
 }
 
 const NOTES = "res://addons/TopNote/Files/Notes.txt"
@@ -79,12 +85,10 @@ func _load_code(search: String = "", search_text: bool = false) -> void:
 			match search_text:
 				true:
 					if code_texts[code].find(search) == -1 and code_names[code].find(search) == -1:
-						print("T")
 						continue
 				false:
 					if code_names[code].find(search) == -1:
 						continue
-						print("N")
 		Codes[code_names[code]] = code_texts[code]
 	if Codes.keys().size() == 0: return
 	var sample: VBoxContainer
@@ -115,6 +119,8 @@ func _load_todo(text: String = "", type: int = 0) -> void:
 				sample.icon = load("res://addons/TopNote/Icons/Add.png")
 			TODO_FIX_BUG:
 				sample.icon = load("res://addons/TopNote/Icons/Fix.png")
+			TODO_TASK:
+				sample.icon = load("res://addons/TopNote/Icons/Task.png")
 			_:
 				sample.icon = load("res://addons/TopNote/Icons/None.png")
 		sample.type = int(list[1])
@@ -125,9 +131,9 @@ func _load_todo(text: String = "", type: int = 0) -> void:
 
 func _show_menu(index: int) -> void:
 	match index:
-		0:
+		MENU_MOVE_TO:
 			Move_to.show()
-		1:
+		MENU_ABOUT:
 			About.show()
 
 
@@ -205,6 +211,8 @@ func _on_button_pressed():
 			sample.icon = load("res://addons/TopNote/Icons/Add.png")
 		TODO_FIX_BUG:
 			sample.icon = load("res://addons/TopNote/Icons/Fix.png")
+		TODO_TASK:
+			sample.icon = load("res://addons/TopNote/Icons/Task.png")
 		_:
 			sample.icon = load("res://addons/TopNote/Icons/None.png")
 	sample.type = NewTodo_Type.selected
@@ -215,7 +223,7 @@ func _on_button_pressed():
 	Todo_list.add_child(sample)
 	for child in children: Todo_list.add_child(child)
 	NewTodo_Text.text = ""
-	NewTodo_Type.selected = 2
+	NewTodo_Type.selected = TODO_NONE
 	_save_todo()
 
 func _on_sample_child_entered_tree(node):
